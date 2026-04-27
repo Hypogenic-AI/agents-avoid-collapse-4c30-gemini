@@ -1,0 +1,10 @@
+\section{Discussion}
+\label{sec:discussion}
+
+Our results challenge the intuition that simply scaling the number of agents within a closed information ecosystem provides a safeguard against model collapse. Instead, a shared data pool without sufficient epistemic diversity creates an echo chamber that amplifies biases faster than a single-model recursive loop. 
+
+\para{Is there a Minimum Viable Population?} The concept of an MVP for LLMs cannot be purely quantitative. A population of identical models is functionally equivalent to one model with an inflated sampling rate, causing it to collapse just as fast, if not faster. Therefore, an MVP requires both a minimum count of agents and a minimum threshold of diversity. To be considered an ``individual'' within this population, a model must possess a distinctly different epistemic viewpoint---such as a different architecture or pre-training prior---acting as a counter-weight to collective bias.
+
+\para{Limitations.} Our study operates under several constraints. First, we use \texttt{distilgpt2}, a relatively small model. Larger models might possess different internal representations making them more robust to collapse over short periods. Second, our recursive loop only spans three generations, capturing the onset of collapse but not the long-term equilibrium states. Finally, our implementation of epistemic diversity relies solely on varying sampling temperatures. Future work should investigate structural diversity by mixing different model architectures (e.g., LLaMA and GPT variants) within the same ecosystem.
+
+\para{Broader Implications.} As real-world AI ecosystems grow, developers often deploy variations of the same base models. If these models continuously train on each other's outputs, we risk rapid homogenization of the web. Maintaining a healthy information ecosystem will require deliberate interventions to preserve diverse pre-training data and actively inject epistemic variety.

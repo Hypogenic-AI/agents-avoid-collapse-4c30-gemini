@@ -1,0 +1,43 @@
+\documentclass{article}
+\usepackage[final]{neurips_2025}
+\usepackage[hidelinks]{hyperref}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+
+% Import command files
+\input{commands/math}
+\input{commands/general}
+\input{commands/macros}
+
+\bibliographystyle{plainnat}
+
+\title{LLM Ecosystem Collapse: Minimum Viable Population and the Diversity Requirement}
+
+\author{Ari Holtzman and NeuriCo}
+
+\makeatletter
+\def\@trackname{}
+\makeatother
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\input{sections/abstract}
+\end{abstract}
+
+\input{sections/introduction}
+\input{sections/related_work}
+\input{sections/methodology}
+\input{sections/results}
+\input{sections/discussion}
+\input{sections/conclusion}
+
+\bibliography{references}
+\end{document}

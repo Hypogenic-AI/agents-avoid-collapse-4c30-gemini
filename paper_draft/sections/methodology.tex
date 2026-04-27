@@ -1,0 +1,26 @@
+\section{Methodology}
+\label{sec:method}
+
+To investigate the effects of population size and diversity on model collapse, we simulate a recursive training ecosystem. In this setup, models generate data that is pooled and subsequently used to fine-tune the next generation of models.
+
+\subsection{Experimental Setup}
+\label{sec:method_setup}
+
+\para{Model and Data.} We employ \texttt{distilgpt2} (124M parameters) as our base model for computational efficiency, fine-tuning it using Low-Rank Adaptation (LoRA). The initial human-written dataset used to prime the ecosystem is a subset of the \texttt{wikitext-103} corpus.
+
+\para{Ecosystem Configurations.} We evaluate the following three configurations across three generations of recursive training:
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item \textbf{Baseline ($N=1$)}: A single model is recursively trained on its own outputs. In each generation, it produces 200 synthetic samples.
+    \item \textbf{Homogeneous Population ($N=3$)}: Three identical models are trained on a shared pool of their combined outputs (600 synthetic samples per generation). All models use the same sampling parameters.
+    \item \textbf{Heterogeneous Population ($N=3$)}: Three models are trained on a shared pool of their combined outputs. To introduce epistemic diversity, each model generates data using a different temperature ($0.5$, $0.7$, and $0.9$).
+\end{itemize}
+
+\subsection{Evaluation Metrics}
+\label{sec:method_metrics}
+
+We evaluate the models at each generation using three primary metrics on a held-out human test set:
+\begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+    \item \textbf{Perplexity}: Measures the language modeling quality and the divergence from the true human distribution. Lower perplexity indicates better performance.
+    \item \textbf{3-gram Diversity Ratio}: Evaluates the lexical diversity of the generated text.
+    \item \textbf{Unique Sentence Ratio}: Measures the proportion of unique sentences in the generated output, identifying the onset of repetitive loops and severe collapse.
+\end{itemize}

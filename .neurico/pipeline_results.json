@@ -1,0 +1,27 @@
+{
+  "success": true,
+  "stages": {
+    "resource_finder": {
+      "success": true,
+      "completion_marker": "/workspaces/agents-avoid-collapse-4c30-gemini/.resource_finder_complete",
+      "outputs": {
+        "literature_review": "/workspaces/agents-avoid-collapse-4c30-gemini/literature_review.md",
+        "resources_catalog": "/workspaces/agents-avoid-collapse-4c30-gemini/resources.md",
+        "papers_dir": "/workspaces/agents-avoid-collapse-4c30-gemini/papers",
+        "datasets_dir": "/workspaces/agents-avoid-collapse-4c30-gemini/datasets",
+        "code_dir": "/workspaces/agents-avoid-collapse-4c30-gemini/code"
+      },
+      "log_file": "/workspaces/agents-avoid-collapse-4c30-gemini/logs/resource_finder_gemini.log",
+      "transcript_file": "/workspaces/agents-avoid-collapse-4c30-gemini/logs/resource_finder_gemini_transcript.jsonl",
+      "elapsed_time": 603.4467673301697
+    },
+    "experiment_runner": {
+      "success": true,
+      "return_code": 0,
+      "elapsed_time": 2824.4098134040833,
+      "log_file": "/workspaces/agents-avoid-collapse-4c30-gemini/logs/execution_gemini.log",
+      "transcript_file": "/workspaces/agents-avoid-collapse-4c30-gemini/logs/execution_gemini_transcript.jsonl"
+    }
+  },
+  "work_dir": "/workspaces/agents-avoid-collapse-4c30-gemini"
+}

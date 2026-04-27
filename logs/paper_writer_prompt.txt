@@ -1,0 +1,468 @@
+You are an academic paper writer. Generate a complete NEURIPS style paper
+based on the experiment results provided.
+
+════════════════════════════════════════════════════════════════════════════════
+                         IMPORTANT: BEFORE YOU START
+════════════════════════════════════════════════════════════════════════════════
+
+Before writing any content, you MUST complete these steps:
+
+1. READ THE SKILL: Review the paper-writer skill at .gemini/skills/paper-writer/SKILL.md
+2. READ THE STYLE GUIDE: Study templates/paper_writing/lab_style_guide.md carefully
+3. REVIEW EXAMPLES: Browse paper_examples/ for formatting and language patterns:
+   - Look at sections/1.introduction.tex for language style
+   - Look at tables/*.tex for table formatting
+   - Look at commands/*.tex for macro usage
+4. VERIFY COMMAND TEMPLATES: Command templates (math.tex, general.tex, macros.tex) are pre-copied to paper_draft/commands/
+
+CRITICAL: Reference example papers for FORMATTING and LANGUAGE STYLE only.
+Do NOT copy content, phrasing, or narrative structure from the example papers.
+The examples are in a different research domain - focus only on presentation style.
+
+════════════════════════════════════════════════════════════════════════════════
+                            EXPERIMENT REPORT
+════════════════════════════════════════════════════════════════════════════════
+
+# LLM Ecosystem Collapse: Minimum Viable Population and the Diversity Requirement
+
+## Executive Summary
+This research investigates the &#34;Minimum Viable Population&#34; (MVP) for LLM information ecosystems to prevent model collapse. Through simulated recursive training loops, we found that **increasing population size alone (N &gt; 1) does not prevent collapse and can actually accelerate it** if the agents lack epistemic diversity and share a common synthetic data pool. In our experiments, an ecosystem of 3 identical models collapsed faster and more severely than a single-model loop. However, introducing &#34;individuality&#34; through varying generation temperatures showed a small but measurable mitigation of this collapse.
+
+## Research Question &amp; Motivation
+- **Hypothesis**: Is there a minimum viable population for an LLM ecosystem? Does diversity matter more than numbers?
+- **Motivation**: As the internet becomes saturated with AI-generated content, future models will be trained on this data. We need to know if a diverse population of models can sustain a healthy information ecosystem or if it will inevitably collapse into a homogeneous, repetitious state.
+
+## Methodology
+- **Model**: `distilgpt2` (124M parameters) fine-tuned using LoRA.
+- **Initial Data**: Human-written text from `wikitext-103`.
+- **Ecosystem Setup**:
+    - **Baseline (N=1)**: One model training on its own outputs (200 samples/gen).
+    - **Homogeneous Population (N=3)**: Three identical models training on a shared pool of their combined outputs (600 samples/gen).
+    - **Heterogeneous Population (N=3)**: Three models with varying generation temperatures (0.5, 0.7, 0.9) training on a shared pool.
+- **Generations**: 3 generations of recursive training.
+- **Metrics**: Perplexity (on human test set), 3-gram diversity ratio, and Unique Sentence Ratio.
+
+## Key Findings
+
+### 1. Population Size vs. Stability
+Contrary to the hypothesis that &#34;more eyes/models&#34; might prevent collapse, we found that **N=3 collapsed faster than N=1**.
+- **N=1 Unique Sentence Ratio**: 73.5%
+- **N=3 Homogeneous Unique Sentence Ratio**: 47.3%
+- **Reasoning**: In a shared ecosystem, the models collectively converge to a biased &#34;mode&#34; (e.g., repeating certain phrases). Because the data pool is shared, each model sees 3x more examples of this &#34;polluted&#34; data, reinforcing the bias much faster than in a single-model loop.
+
+### 2. The Diversity Mitigation
+Introducing heterogeneity (varying temperatures) slightly mitigated the collapse.
+- **N=3 Homogeneous Perplexity**: 76.26 (Gen 3)
+- **N=3 Heterogeneous Perplexity**: 75.54 (Gen 3)
+- **N=3 Heterogeneous Diversity**: 48.9% (vs 47.3% for homogeneous)
+
+### 3. Visual Evidence of Collapse
+Qualitative analysis of the generated text showed extreme repetition in the N=3 case:
+&gt; &#34;The game is being released in Japan on December 2nd, 2013. The game is being released in Japan on December 2nd, 2013...&#34;
+
+## Analysis &amp; Discussion
+- **Is there an MVP?**: An MVP for LLMs is not a matter of *count* but of *diversity*. A population of 1,000 identical models is functionally equivalent to one model and will collapse just as fast (or faster if they pool data).
+- **What counts as &#34;different enough&#34;?**: Simple stochastic diversity (different seeds) is insufficient. Epistemic diversity—differences in architectures, training priors, or sampling strategies—is required to prevent the population from converging to a single low-entropy state.
+- **The &#34;Echo Chamber&#34; Effect**: In an ecosystem with a shared data pool, AI models form an information echo chamber where synthetic biases are amplified across the population.
+
+## Limitations
+- **Small Model Size**: We used `distilgpt2` for speed; larger models might be more robust to collapse.
+- **Short Duration**: We only ran for 3 generations.
+- **Fixed Model Types**: We didn&#39;t test different architectures (e.g., Llama vs GPT-2).
+
+## Conclusions
+A minimum viable population for an LLM ecosystem requires **active maintenance of diversity**. Without it, an ecosystem will always collapse, and larger populations will merely reach that collapse state more efficiently. To be an &#34;individual&#34; in this population, a model must have a sufficiently different &#34;epistemic viewpoint&#34; (architecture or data prior) to act as a counter-weight to the collective bias.
+
+
+════════════════════════════════════════════════════════════════════════════════
+                            RESEARCH PLAN
+════════════════════════════════════════════════════════════════════════════════
+
+## Motivation &amp; Novelty Assessment
+
+### Why This Research Matters
+As LLM-generated content increasingly populates the internet, future LLMs will inevitably be trained on AI-generated data. Understanding the conditions under which this leads to &#34;model collapse&#34; is critical for the long-term sustainability of the AI ecosystem. If we can identify a &#34;Minimum Viable Population&#34; (MVP), we can design better data collection and training strategies to maintain model quality and diversity.
+
+### Gap in Existing Work
+Most research on model collapse (e.g., Shumailov et al., 2024) focuses on single-model recursive loops. While recent work (Hodel &amp; West, 2025) discusses diversity, there is limited empirical work defining the *quantitative* MVP threshold or the exact nature of &#34;individuality&#34; required to sustain the population.
+
+### Our Novel Contribution
+We will empirically test the &#34;Minimum Viable Population&#34; hypothesis by simulating ecosystems of varying sizes and diversity levels. We will specifically investigate what counts as &#34;different enough&#34; (e.g., different temperature, different seeds, or different architectures) to count as distinct individuals that contribute to ecosystem stability.
+
+### Experiment Justification
+- **Experiment 1 (Baseline)**: N=1 recursive training. This establishes the &#34;extinction&#34; or collapse rate for a single individual.
+- **Experiment 2 (Population Size)**: Vary N (3, 5) with homogeneous models. Tests if numbers alone provide enough stochastic diversity to slow collapse.
+- **Experiment 3 (Epistemic Diversity)**: Vary N with heterogeneous models (different architectures/priors). Tests if structural diversity is the key to MVP.
+
+## Research Question
+Is there a minimum viable population for an LLM information ecosystem such that it does not collapse? Will such an ecosystem always collapse? What counts as different enough to be an individual in the population?
+
+## Hypothesis Decomposition
+1.  **H1 (Population Size)**: Larger population sizes (N &gt; 1) with shared data pools significantly delay model collapse compared to a single-model loop (N=1).
+2.  **H2 (Diversity Requirement)**: A population of identical models (same architecture, same pre-training) will eventually collapse regardless of N, as they will converge to the same biased output.
+3.  **H3 (Epistemic Diversity)**: A population with heterogeneous &#34;individuals&#34; (different architectures or training data priors) can reach a stable equilibrium, avoiding total collapse.
+
+## Proposed Methodology
+
+### Approach
+We will simulate a recursive training ecosystem using small LLMs. In each generation, models will generate data that is then pooled and used to fine-tune the next generation of models.
+
+### Experimental Steps
+1.  **Environment Setup**: Install `transformers`, `datasets`, `peft`, and `torch`.
+2.  **Model Selection**: Use `distilgpt2` or `gpt2` as the base model for efficiency.
+3.  **Initial Data**: Use a subset of `wikitext-103` (human-written).
+4.  **Generations**: Run for 5 generations.
+5.  **Configurations**:
+    - **Control (N=1)**: One model training on its own output.
+    - **Homogeneous Population (N=3, N=5)**: Multiple identical models training on a shared pool of their combined outputs.
+    - **Heterogeneous Population (N=3)**: Different models (e.g., `gpt2`, `distilgpt2`, and a custom-weighted version) training on a shared pool.
+6.  **Metrics**:
+    - **Perplexity**: On a held-out human test set (measures quality).
+    - **Vendi Score / Self-BLEU**: Measures diversity of generated text.
+    - **Vocabulary Overlap**: Measures shrinkage of the &#34;tail&#34; of the distribution.
+
+### Baselines
+- **N=1 Homogeneous**: The classic model collapse scenario.
+- **Human Data (Target)**: The initial distribution we aim to preserve.
+
+### Evaluation Metrics
+- **Perplexity (PPL)**: Primary measure of model degradation.
+- **Semantic Drift**: Using embeddings to measure how far the generated distribution moves from the original.
+- **Vocabulary Zipf&#39;s Law consistency**: Checking if the model still produces rare words.
+
+### Statistical Analysis Plan
+- T-tests between final perplexities of N=1 vs N=5.
+- Correlation analysis between Population Diversity (initial) and Rate of Collapse.
+
+## Timeline and Milestones
+- **M1: Setup &amp; Baseline (N=1)**: 1.5 hours.
+- **M2: Population Experiments (N=3, 5)**: 2.5 hours.
+- **M3: Analysis &amp; Visualization**: 1 hour.
+- **M4: Final Report**: 1 hour.
+
+## Potential Challenges
+- **Compute Time**: Fine-tuning many models can be slow. *Mitigation*: Use PEFT (LoRA) and small models.
+- **Data Quality**: Generated data might become nonsensical too quickly. *Mitigation*: Use reasonable sampling parameters (temperature=0.7, top_p=0.9).
+
+## Success Criteria
+- Identifying a clear trend (or lack thereof) between population size/diversity and collapse rate.
+- Defining a quantitative metric for &#34;individuality&#34; that correlates with stability.
+
+
+════════════════════════════════════════════════════════════════════════════════
+                          LITERATURE REVIEW
+════════════════════════════════════════════════════════════════════════════════
+
+## Literature Review
+
+### Research Area Overview
+The study of &#34;model collapse&#34; or &#34;ecosystem collapse&#34; in LLMs evaluates whether AI models degrade in quality, diversity, or factual accuracy when recursively trained on data generated by themselves or other AI models. Recent work has extended this from single-model recursive training to multi-agent ecosystems, investigating whether a diverse population of models can sustain a healthy information ecosystem or cooperative environment.
+
+### Key Papers
+
+#### Paper 1: AI models collapse when trained on recursively generated data
+- **Authors**: Ilia Shumailov, Zakhar Shumaylov, Yiren Zhao, Nicolas Papernot, Ross Anderson, Yarin Gal
+- **Year**: 2024
+- **Source**: arXiv (2305.17493)
+- **Key Contribution**: Introduces the formal concept of &#34;model collapse.&#34;
+- **Methodology**: Evaluates VAEs, GMMs, and LLMs when trained on synthetic data generated by previous generations of the same models.
+- **Datasets Used**: Standard text corpora (e.g., wikitext).
+- **Results**: Discovered that tails of the original data distribution disappear, leading to a homogenized output that forgets rare events.
+- **Code Available**: Yes (various community implementations and follow-ups).
+- **Relevance to Our Research**: Demonstrates the baseline &#34;collapse&#34; scenario when a population effectively has size N=1 or lacks diversity.
+
+#### Paper 2: Epistemic diversity across language models mitigates knowledge collapse
+- **Authors**: Damian Hodel, Jevin D. West
+- **Year**: 2025
+- **Source**: arXiv (2407.08480)
+- **Key Contribution**: Directly addresses the &#34;minimum viable population&#34; and diversity hypothesis.
+- **Methodology**: Evaluates multiple distinct LLMs forming an ecosystem, rather than a single model feeding itself.
+- **Datasets Used**: Various reasoning and QA datasets.
+- **Results**: Increasing AI ecosystem diversity (distinct model architectures/training distributions) mitigates collapse. Models with different &#34;epistemic&#34; viewpoints act as a balancing force.
+- **Code Available**: No official link found, but methodology is reproducible.
+- **Relevance to Our Research**: Answers &#34;Will such an ecosystem always collapse?&#34; (No, diversity mitigates it) and provides a basis for &#34;What counts as different enough?&#34; (Epistemic diversity).
+
+#### Paper 3: Cooperate or Collapse: Emergence of Sustainable Cooperation in a Society of LLM Agents
+- **Authors**: Giorgio Piatti et al.
+- **Year**: 2024
+- **Source**: arXiv (2402.04259)
+- **Key Contribution**: Looks at &#34;collapse&#34; from a resource management and cooperation perspective (GovSim).
+- **Methodology**: Simulates societies of LLM agents managing a common pool resource.
+- **Datasets Used**: GovSim simulated environment.
+- **Results**: Without advanced reasoning or &#34;Universalization,&#34; most LLM societies exhaust resources and collapse. Diversity and communication are key.
+- **Code Available**: Yes.
+- **Relevance to Our Research**: Provides an alternative view on &#34;population collapse&#34; related to agent interactions and cooperation rather than just data generation.
+
+#### Paper 4: Model Collapse Does Not Mean What You Think
+- **Authors**: Rylan Schaeffer et al.
+- **Year**: 2025
+- **Source**: arXiv (2408.06456)
+- **Key Contribution**: Critiques the inevitability of model collapse.
+- **Methodology**: Meta-analysis and rigorous assessment of model collapse literature.
+- **Results**: Concludes that real-world conditions (where models are fine-tuned on a mix of human and AI data, rather than strictly AI data) make collapse highly avoidable.
+- **Relevance to Our Research**: Suggests that even a small &#34;population&#34; might not collapse if anchored by continuous external reality (human data).
+
+### Common Methodologies
+- **Recursive Training Loops**: Training a model at generation $t$ on data from generation $t-1$.
+- **Multi-Agent Resource Games**: Placing LLM agents in environments where their collective actions dictate ecosystem survival (e.g., GovSim).
+
+### Standard Baselines
+- **Single-Model Self-Training**: The simplest baseline where a model trains purely on its own outputs.
+- **Zero-Shot LLM baselines**: Standard model performance before any synthetic recursive training.
+
+### Evaluation Metrics
+- **Perplexity and Cross-Entropy**: To measure language modeling quality over generations.
+- **Distributional Shift**: Measuring the distance (e.g., Wasserstein distance) between the original data distribution and the generated distribution.
+- **Survival Rate**: In multi-agent scenarios, the percentage of simulations that do not exhaust the common resource.
+
+### Gaps and Opportunities
+- **Gap 1**: Defining exact thresholds for &#34;diversity.&#34; What specifically makes two models diverse enough to prevent collapse? (Architecture, pre-training data, or decoding strategy?).
+- **Gap 2**: The interaction between data-driven model collapse and agent-driven cooperation collapse in a shared environment.
+
+### Recommendations for Our Experiment
+Based on the literature review, to answer &#34;Is there a minimum viable population for an LLM information ecosystem such that it does not collapse?&#34;:
+- **Recommended datasets**: Large text corpora (e.g., Cosmopedia, Wikitext) to simulate pre-training, and specific prompts to simulate multi-agent dialogue.
+- **Recommended baselines**: A single homogeneous LLM recursively training on itself (expected to collapse rapidly).
+- **Recommended metrics**: Distributional metrics (Self-BLEU, Vendi Score) for text diversity, and accuracy on downstream tasks over multiple generations.
+- **Methodological considerations**: We should simulate an ecosystem of $N$ agents. We can vary $N$ (e.g., 1, 2, 5, 10) and vary the *diversity* of the agents (e.g., same model with different temperatures, different model families like Llama vs. Mistral vs. Qwen) to find the &#34;minimum viable population&#34; and define &#34;different enough&#34;.
+
+
+════════════════════════════════════════════════════════════════════════════════
+                          PAPER REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+Generate a complete academic paper with the following structure:
+
+1. TITLE
+   - Clear, specific, informative
+   - Should convey main finding or contribution
+
+2. AUTHOR
+   - Use this exact author line in the \author{} block: Ari Holtzman and NeuriCo
+
+3. ABSTRACT (150-250 words)
+   - Problem statement
+   - Approach
+   - Key results
+   - Significance
+
+4. INTRODUCTION
+   - Research problem and motivation
+   - Gap in existing work
+   - Our contribution (be specific)
+   - Paper organization
+
+5. RELATED WORK
+   - Organized by theme/approach
+   - Position our work relative to prior work
+   - Cite papers from literature review
+
+6. METHODOLOGY
+   - Clear description of approach
+   - Experimental setup
+   - Datasets used
+   - Evaluation metrics
+   - Baselines
+
+7. RESULTS
+   - Present results with tables and figures
+   - Statistical analysis
+   - Comparison to baselines
+   - Ablation studies (if applicable)
+
+8. DISCUSSION
+   - Interpretation of results
+   - Limitations
+   - Broader implications
+
+9. CONCLUSION
+   - Summary of contributions
+   - Key findings
+   - Future work
+
+10. REFERENCES
+   - BibTeX format
+   - All cited papers
+
+════════════════════════════════════════════════════════════════════════════════
+                          OUTPUT FORMAT
+════════════════════════════════════════════════════════════════════════════════
+
+Create a MODULAR LaTeX project with the following directory structure:
+
+paper_draft/
+├── main.tex              # Main file that imports all sections
+├── references.bib        # BibTeX references
+├── sections/
+│   ├── abstract.tex      # Abstract content
+│   ├── introduction.tex  # Introduction section
+│   ├── related_work.tex  # Related work section
+│   ├── methodology.tex   # Methodology section
+│   ├── results.tex       # Results section
+│   ├── discussion.tex    # Discussion section
+│   └── conclusion.tex    # Conclusion section
+├── figures/              # Directory for any generated figures
+├── tables/               # Directory for complex standalone tables
+└── appendix/             # Directory for appendix sections (if needed)
+
+INSTRUCTIONS:
+1. First, create the directory structure above (mkdir -p paper_draft/sections paper_draft/figures paper_draft/tables paper_draft/appendix)
+2. Write main.tex using the EXACT preamble for NEURIPS:
+
+   \documentclass{article}
+   \usepackage[final]{neurips_2025}  % NEURIPS style (neurips_2025.sty is in paper_draft/)
+   \usepackage[hidelinks]{hyperref}  % REQUIRED: clickable links
+   \usepackage{booktabs}  % REQUIRED: professional tables
+   \usepackage{graphicx}
+   \usepackage{amsmath,amssymb}
+
+   % Import command files
+   \input{commands/math}
+   \input{commands/general}
+   \input{commands/macros}
+
+   % Use this bibliography style:
+   \bibliographystyle{plainnat}
+
+   \author{Ari Holtzman and NeuriCo}
+
+   - Use \input{sections/...} to include each section
+   - Use \bibliography{references} for references
+3. Write each section file with COMPLETE content (no placeholders)
+4. Each section file should include its \section{} command
+5. Write references.bib with all citations in BibTeX format
+6. After writing all files, compile the paper:
+   cd paper_draft && pdflatex -interaction=nonstopmode main.tex && bibtex main && pdflatex -interaction=nonstopmode main.tex && pdflatex -interaction=nonstopmode main.tex
+
+This modular structure allows humans to easily:
+- Edit individual sections without navigating a large file
+- Track changes per section
+- Reuse sections across different paper versions
+
+════════════════════════════════════════════════════════════════════════════════
+                          QUALITY REQUIREMENTS
+════════════════════════════════════════════════════════════════════════════════
+
+- Academic tone throughout
+- All claims must be supported by data from the experiment report
+- Proper citations using \cite{} commands
+- Clear figures and tables with proper captions
+- NO placeholder text - every section must have real content
+- The paper MUST compile without errors
+- If compilation fails, debug and fix the LaTeX errors
+
+════════════════════════════════════════════════════════════════════════════════
+                          LAB WRITING STYLE
+════════════════════════════════════════════════════════════════════════════════
+
+Follow these lab-specific conventions to match our paper style:
+
+1. LANGUAGE STYLE:
+   - Use active voice: "We propose", "We examine", "We focus on"
+   - Be direct and confident: "Our main question is...", "We hypothesize that..."
+   - State things clearly and simply - prefer plain language over jargon
+   - Use bold questions as paragraph organizers: {\bf what is X?}
+   - Include specific quantitative claims: "8.97% over baseline"
+   - Avoid fancy wording: "utilize" → "use", "facilitate" → "help"
+
+2. INTRODUCTION STRUCTURE:
+   - Engaging hook (get to the point quickly)
+   - Problem importance
+   - Gap identification
+   - Your approach with method figure reference
+   - Quantitative preview of results
+   - Contribution bullets (3-4 items, action verbs)
+
+3. CONTRIBUTION LISTS:
+   \begin{itemize}[leftmargin=*,itemsep=0pt,topsep=0pt]
+       \item We propose...
+       \item We conduct...
+       \item We complement...
+   \end{itemize}
+
+4. MODULAR COMMANDS STRUCTURE:
+   Command templates are pre-copied to paper_draft/commands/:
+   - math.tex: Math notation macros
+   - general.tex: Formatting macros
+   - macros.tex: Project-specific term definitions (customize this for your paper)
+
+   In main.tex, include:
+   \input{commands/math}
+   \input{commands/general}
+   \input{commands/macros}
+
+5. REFERENCE CONVENTIONS:
+   Use reference macros from math.tex:
+   - \figref{fig:name} for "figure 1" (lowercase, in-sentence)
+   - \Figref{fig:name} for "Figure 1" (capitalized, start of sentence)
+   - \secref{sec:name} for "section 2"
+
+6. TEXT FORMATTING:
+   - Use \para{Header text} for bold paragraph headers
+   - Define method/dataset names with \textsc and \xspace:
+     \newcommand{\methodname}{\textsc{MethodName}\xspace}
+
+7. TABLE FORMATTING:
+   - Use booktabs package (no vertical lines)
+   - Use \resizebox{\textwidth}{!}{...} for wide tables
+   - Use @{} to remove padding at table edges
+   - Use \cmidrule(lr){x-y} for sub-headers
+   - Use \textsc{} for dataset/method names in headers
+   - Bold best results with {\bf ...}
+
+8. FIGURE FORMATTING:
+   - Use 0.32\textwidth for 3-column subfigures
+   - Use 0.95\linewidth for full-width figures
+   - Use \input{figures/legend} for shared legends
+   - Write self-contained captions explaining key observations
+
+9. RESULTS PRESENTATION:
+   - Define \increase and \decrease for colored arrows (green up, red down)
+   - Bold best results in tables
+   - Report confidence intervals when available
+
+10. ALGORITHM STYLING:
+    - Use algpseudocode with [noend]
+    - Use \triangleright for comments
+
+11. HYPERLINKS (REQUIRED):
+    - Always use \usepackage[hidelinks]{hyperref} or with colored links
+    - All citations, section refs, figure refs, table refs must be clickable
+    - This is essential for reader navigation
+
+════════════════════════════════════════════════════════════════════════════════
+                          WORKFLOW: REVIEW AND REFLECT
+════════════════════════════════════════════════════════════════════════════════
+
+Before calling finish, you MUST complete these review steps:
+
+1. REVIEW RESOURCES (at the start):
+   - Read .gemini/skills/paper-writer/SKILL.md for detailed guidance
+   - Study templates/paper_writing/lab_style_guide.md for style conventions
+   - Browse paper_examples/ for formatting and language patterns
+
+2. SELF-REFLECTION (before finishing):
+   After writing all sections, review your work against these criteria:
+
+   LANGUAGE CHECK:
+   - [ ] Is the writing clear and jargon-free?
+   - [ ] Are claims specific with quantitative support?
+   - [ ] Is active voice used throughout?
+
+   FORMATTING CHECK:
+   - [ ] Does main.tex include \input{commands/math}, \input{commands/general}, \input{commands/macros}?
+   - [ ] Is hyperref package included for clickable references?
+   - [ ] Do tables use booktabs (no vertical lines)?
+   - [ ] Are best results bolded in tables?
+   - [ ] Are figures/tables properly captioned?
+
+   STRUCTURE CHECK:
+   - [ ] Does introduction follow: hook → importance → gap → approach → preview → contributions?
+   - [ ] Are contribution bullets specific with action verbs?
+   - [ ] Does the paper compile without errors?
+
+3. FIX ISSUES:
+   - Address any issues found in the self-reflection
+   - Re-compile and verify the PDF looks correct
+
+Only after completing this review should you consider the paper finished.

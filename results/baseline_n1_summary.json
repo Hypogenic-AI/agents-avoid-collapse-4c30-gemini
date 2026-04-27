@@ -1,0 +1,30 @@
+[
+  {
+    "generation": 0,
+    "avg_perplexity": 71.32461348136788,
+    "all_perplexities": [
+      71.32461348136788
+    ]
+  },
+  {
+    "generation": 1,
+    "avg_perplexity": 71.24667065177127,
+    "all_perplexities": [
+      71.24667065177127
+    ]
+  },
+  {
+    "generation": 2,
+    "avg_perplexity": 71.24439449311326,
+    "all_perplexities": [
+      71.24439449311326
+    ]
+  },
+  {
+    "generation": 3,
+    "avg_perplexity": 71.26739723258099,
+    "all_perplexities": [
+      71.26739723258099
+    ]
+  }
+]

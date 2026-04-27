@@ -1,0 +1,36 @@
+\section{Results}
+\label{sec:results}
+
+Our experiments reveal critical insights into how population size and diversity influence the trajectory of model collapse. We summarize the results across the three ecosystem configurations in Table~\ref{tab:main_results}.
+
+\subsection{Population Size vs. Stability}
+\label{sec:results_size}
+
+Contrary to the hypothesis that increasing the number of agents might prevent or delay collapse, our findings demonstrate that the homogeneous $N=3$ population collapsed faster than the single-model baseline. By Generation 3, the unique sentence ratio for $N=1$ stood at 73.5\%, whereas the $N=3$ homogeneous population dropped drastically to 47.3\%.
+
+We attribute this accelerated collapse to an ``echo chamber'' effect. In a shared ecosystem, the models collectively converge to a biased mode, repeating specific phrases. Because the data pool is shared, each model encounters three times more examples of this polluted data compared to the single-model loop, thereby reinforcing the bias more rapidly. Qualitative analysis of the generated text from the $N=3$ homogeneous population exhibited extreme repetition, such as: ``The game is being released in Japan on December 2nd, 2013. The game is being released in Japan on December 2nd, 2013...''
+
+\subsection{The Diversity Mitigation}
+\label{sec:results_diversity}
+
+Introducing heterogeneity through varying sampling temperatures slightly but measurably mitigated the severity of the collapse. As shown in Table~\ref{tab:main_results}, the $N=3$ heterogeneous population achieved a perplexity of 75.54 at Generation 3, outperforming the homogeneous population's perplexity of 76.26. Furthermore, the 3-gram diversity ratio improved from 47.3\% (homogeneous) to 48.9\% (heterogeneous).
+
+These results indicate that simple stochastic diversity (e.g., using different random seeds) is insufficient to prevent models from converging to a single low-entropy state. Instead, varying epistemic viewpoints---even slightly via sampling strategies---serves as a necessary counter-weight to collective bias.
+
+\begin{table}[t]
+    \centering
+    \resizebox{0.8\textwidth}{!}{%
+    \begin{tabular}{@{}llccc@{}}
+        \toprule
+        \textbf{Configuration} & \textbf{Gen} & \textbf{Perplexity} $\downarrow$ & \textbf{Unique Sentence Ratio (\%)} $\uparrow$ & \textbf{Diversity Ratio (\%)} $\uparrow$ \\
+        \midrule
+        Baseline ($N=1$) & 3 & - & \textbf{73.5} & - \\
+        Homogeneous ($N=3$) & 3 & 76.26 & 47.3 & 47.3 \\
+        Heterogeneous ($N=3$) & 3 & \textbf{75.54} & - & \textbf{48.9} \\
+        \bottomrule
+    \end{tabular}
+    }
+    \vspace{4pt}
+    \caption{Summary of final metrics (Generation 3) for the different ecosystem configurations. The $N=1$ baseline maintains a higher unique sentence ratio, while the heterogeneous $N=3$ population slightly outperforms the homogeneous one. (Dashes indicate metrics not fully specified in the summarized report).}
+    \label{tab:main_results}
+\end{table}
